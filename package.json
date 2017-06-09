@@ -1,0 +1,23 @@
+{
+  "name": "stripe-grabber",
+  "version": "1.0.0",
+  "description": "",
+  "main": "stripeGrabber.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node stripeGrabber.js",
+    "lint": "eslint app"
+  },
+  "author": "Maxim Sklyarov",
+  "license": "ISC",
+  "dependencies": {
+    "dateformat": "^2.0.0",
+    "stripe": "^4.22.0",
+    "ya-csv": "^0.10.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.3.0"
+  }
+}

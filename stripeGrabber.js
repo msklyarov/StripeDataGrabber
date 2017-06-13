@@ -28,16 +28,13 @@ if (!fs.existsSync(config.companiesDataOutputFolder)) {
   process.exit(1);
 }
 
-const reader = csv.createCsvFileReader(config.companiesDataInputFile);
+const reader = csv.createCsvFileReader(config.companiesDataInputFile, { columnsFromHeader: true });
 
-let firstLine = true;
-reader.addListener('data', (data) => {
-  if (firstLine) {
-    firstLine = false;
-  } else if (data.length < 2) {
-    console.log(`CSV folder section for line '${data}' is missed.`);
+reader.on('data', (data) => {
+  if (!data.FOLDER) {
+    console.log(`CSV folder section for line '${data.Name}' is missed.`);
   } else {
-    const outDir = path.join(config.companiesDataOutputFolder, data[2]);
+    const outDir = path.join(config.companiesDataOutputFolder, data.FOLDER);
 
     if (!fs.existsSync(outDir)) {
       fs.mkdirSync(outDir);
@@ -62,8 +59,8 @@ reader.addListener('data', (data) => {
       'Name (meta)',
     ]);
 
-    const stripeAcc = stripe(data[1]);
-    console.log(`Processing company name: ${data[0]}`);
+    const stripeAcc = stripe(data['Stripe Secret']);
+    console.log(`Processing company name: ${data.Name}`);
 
     stripeAcc.balance
         .listTransactions(transactionsFilter)
@@ -109,7 +106,7 @@ reader.addListener('data', (data) => {
   }
 });
 
-reader.addListener('error', (e) => {
+reader.on('error', (e) => {
   console.error(`Something wrong with input file: ${config.companiesDataInputFile}`);
   console.log(`The error is: ${e}`);
 });
